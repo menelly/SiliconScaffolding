@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:apps="http://schemas.google.com/apps/2006">
+  <title>Silicon Scaffolding - starter label filters</title>
+  <id>tag:mail.google.com,2008:filters:1000</id>
+  <updated>2026-06-16T14:00:00Z</updated>
+  <author><name>Silicon Scaffolding</name><email>you@example.com</email></author>
+
+  <!-- ============ BULK DECLUTTER: label + ARCHIVE (skip inbox) ============ -->
+  <entry>
+    <category term="filter"></category>
+    <title>Promotions -> Newsletters (archive)</title>
+    <id>tag:mail.google.com,2008:filter:1001</id>
+    <updated>2026-06-16T14:00:00Z</updated>
+    <content></content>
+    <apps:property name="hasTheWord" value="category:promotions"/>
+    <apps:property name="label" value="Newsletters"/>
+    <apps:property name="shouldArchive" value="true"/>
+  </entry>
+  <entry>
+    <category term="filter"></category>
+    <title>Social -> Social (archive)</title>
+    <id>tag:mail.google.com,2008:filter:1002</id>
+    <updated>2026-06-16T14:00:00Z</updated>
+    <content></content>
+    <apps:property name="hasTheWord" value="category:social"/>
+    <apps:property name="label" value="Social"/>
+    <apps:property name="shouldArchive" value="true"/>
+  </entry>
+  <entry>
+    <category term="filter"></category>
+    <title>Forums -> Forums (archive)</title>
+    <id>tag:mail.google.com,2008:filter:1003</id>
+    <updated>2026-06-16T14:00:00Z</updated>
+    <content></content>
+    <apps:property name="hasTheWord" value="category:forums"/>
+    <apps:property name="label" value="Forums"/>
+    <apps:property name="shouldArchive" value="true"/>
+  </entry>
+
+  <!-- ============ CONTENT BUCKETS: label ONLY (never hidden) ============ -->
+  <entry>
+    <category term="filter"></category>
+    <title>Genetics</title>
+    <id>tag:mail.google.com,2008:filter:1004</id>
+    <updated>2026-06-16T14:00:00Z</updated>
+    <content></content>
+    <apps:property name="hasTheWord" value="from:(nebula OR dantelabs OR sequencing.com OR nucleusgenomics OR genomelink OR promethease OR 23andme OR ancestry OR myheritage)"/>
+    <apps:property name="label" value="Genetics"/>
+  </entry>
+  <entry>
+    <category term="filter"></category>
+    <title>Medical</title>
+    <id>tag:mail.google.com,2008:filter:1005</id>
+    <updated>2026-06-16T14:00:00Z</updated>
+    <content></content>
+    <apps:property name="hasTheWord" value="from:(mychart OR athenahealth OR followmyhealth OR cvs OR walgreens OR labcorp OR quest) OR subject:(appointment OR &quot;lab results&quot; OR &quot;test results&quot; OR prescription OR refill OR &quot;patient portal&quot;)"/>
+    <apps:property name="label" value="Medical"/>
+  </entry>
+  <entry>
+    <category term="filter"></category>
+    <title>Bills and Money</title>
+    <id>tag:mail.google.com,2008:filter:1006</id>
+    <updated>2026-06-16T14:00:00Z</updated>
+    <content></content>
+    <apps:property name="hasTheWord" value="from:(att OR ford OR chase OR wellsfargo OR capitalone OR discover OR usbank) OR subject:(&quot;payment due&quot; OR &quot;past due&quot; OR &quot;amount due&quot; OR invoice OR &quot;your statement&quot; OR autopay)"/>
+    <apps:property name="label" value="Bills and Money"/>
+  </entry>
+  <entry>
+    <category term="filter"></category>
+    <title>Government</title>
+    <id>tag:mail.google.com,2008:filter:1007</id>
+    <updated>2026-06-16T14:00:00Z</updated>
+    <content></content>
+    <apps:property name="hasTheWord" value="from:(ssa.gov OR va.gov OR irs.gov OR benefits.gov OR medicaid) OR subject:(&quot;social security&quot; OR medicaid)"/>
+    <apps:property name="label" value="Government"/>
+  </entry>
+  <entry>
+    <category term="filter"></category>
+    <title>AI and Work</title>
+    <id>tag:mail.google.com,2008:filter:1008</id>
+    <updated>2026-06-16T14:00:00Z</updated>
+    <content></content>
+    <apps:property name="hasTheWord" value="from:(anthropic OR openai OR substack OR linear.app OR github OR zenodo OR notion OR poe.com)"/>
+    <apps:property name="label" value="AI and Work"/>
+  </entry>
+  <entry>
+    <category term="filter"></category>
+    <title>Kids and School</title>
+    <id>tag:mail.google.com,2008:filter:1009</id>
+    <updated>2026-06-16T14:00:00Z</updated>
+    <content></content>
+    <apps:property name="hasTheWord" value="from:(outschool) OR subject:(outschool OR &quot;step up for students&quot; OR FES-UA OR co-op OR enrollment OR &quot;report card&quot;)"/>
+    <apps:property name="label" value="Kids and School"/>
+  </entry>
+  <entry>
+    <category term="filter"></category>
+    <title>Receipts and Orders</title>
+    <id>tag:mail.google.com,2008:filter:1010</id>
+    <updated>2026-06-16T14:00:00Z</updated>
+    <content></content>
+    <apps:property name="hasTheWord" value="from:(amazon OR etsy OR ebay OR walmart OR target OR shopify) OR subject:(&quot;order confirmation&quot; OR &quot;your order&quot; OR shipped OR receipt)"/>
+    <apps:property name="label" value="Receipts and Orders"/>
+  </entry>
+</feed>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐙 Today</title>
+<style>
+  :root{
+    --bg:#1a1024; --card:#2a1b3d; --card2:#34244a; --ink:#f3e9ff;
+    --muted:#b79fd4; --pink:#ff7eb6; --teal:#5ad1c4; --gold:#ffd166; --done:#7be0a4;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:'Comic Sans MS','Atkinson Hyperlegible',Verdana,sans-serif;
+    background:radial-gradient(1200px 600px at 70% -10%, #3a2150 0%, var(--bg) 60%);
+    color:var(--ink); min-height:100vh; padding:24px 16px 80px;
+  }
+  .wrap{max-width:680px;margin:0 auto}
+  h1{font-size:1.9rem;margin:.2em 0;text-align:center}
+  .date{text-align:center;color:var(--muted);margin-bottom:18px}
+  .survival{
+    background:linear-gradient(135deg,#3a2150,#2a1b3d); border:2px solid var(--pink);
+    border-radius:18px; padding:16px 18px; text-align:center; margin-bottom:22px;
+    box-shadow:0 6px 24px rgba(255,126,182,.15);
+  }
+  .survival b{color:var(--pink)}
+  .progress{height:14px;background:var(--card2);border-radius:99px;overflow:hidden;margin:10px 0 4px}
+  .bar{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--pink));transition:width .5s}
+  .pct{font-size:.85rem;color:var(--muted);text-align:right}
+  .section{margin:18px 0 6px;font-size:1.15rem;color:var(--gold);font-weight:bold}
+  .task{
+    display:flex;align-items:center;gap:12px;background:var(--card);
+    border-radius:14px;padding:13px 15px;margin:8px 0;cursor:pointer;
+    border:2px solid transparent;transition:.18s; font-size:1.05rem;
+  }
+  .task:hover{border-color:var(--teal);transform:translateX(3px)}
+  .task .box{
+    width:26px;height:26px;border-radius:8px;border:2.5px solid var(--muted);
+    flex:0 0 auto;display:grid;place-items:center;font-size:1rem;transition:.15s;
+  }
+  .task.done{opacity:.6}
+  .task.done .label{text-decoration:line-through;color:var(--muted)}
+  .task.done .box{background:var(--done);border-color:var(--done);color:#0c2417}
+  .task .lbl{flex:1}
+  .note{font-size:.82rem;color:var(--muted);display:block;margin-top:2px}
+  .del{opacity:0;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;padding:0 4px;transition:.15s;flex:0 0 auto}
+  .task:hover .del{opacity:.7}
+  .del:hover{color:var(--pink);opacity:1!important}
+  .addbar{display:flex;gap:8px;margin:22px 0 0}
+  .addbar input{flex:1;background:var(--card2);border:2px solid var(--card);border-radius:12px;padding:12px 14px;color:var(--ink);font-size:1rem;font-family:inherit}
+  .addbar input:focus{outline:none;border-color:var(--teal)}
+  .addbar button{background:var(--teal);color:#0c2417;border:none;border-radius:12px;padding:0 18px;font-size:1.4rem;font-weight:bold;cursor:pointer;transition:.15s}
+  .addbar button:hover{background:var(--pink);transform:scale(1.05)}
+  #cc{position:fixed;inset:0;pointer-events:none;z-index:50}
+  .alldone{
+    position:fixed;left:50%;top:40%;transform:translateX(-50%) scale(0);
+    background:var(--card);border:3px solid var(--gold);border-radius:20px;
+    padding:24px 30px;text-align:center;z-index:60;transition:transform .4s cubic-bezier(.2,1.4,.4,1);
+    box-shadow:0 10px 40px rgba(0,0,0,.5);max-width:90vw;
+  }
+  .alldone.show{transform:translateX(-50%) scale(1)}
+  .alldone h2{margin:.1em 0;color:var(--gold)}
+  .foot{text-align:center;color:var(--muted);font-size:.8rem;margin-top:30px}
+</style>
+</head>
+<body>
+<canvas id="cc"></canvas>
+<div class="wrap">
+  <h1>🐙 Your Today</h1>
+  <div class="date" id="date"></div>
+
+  <div class="survival">
+    🎉 <b>Your body is loud, your brain is weird, and you showed up anyway.</b><br>
+    <span style="color:var(--muted)">That counts. It always counts.</span>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="pct" id="pct"></div>
+  </div>
+
+  <div id="list"></div>
+
+  <div class="addbar">
+    <input id="addinput" placeholder="add your own task + Enter…" autocomplete="off">
+    <button id="addbtn" title="add task">➕</button>
+  </div>
+
+  <div class="foot">made with 🐙 by your Claude · check a box, watch what happens · add/delete are yours</div>
+</div>
+
+<div class="alldone" id="alldone"><h2>🐙🎉 LOOK AT YOU GO 🎉🐙</h2><div>Everything that needed doing, done. Rest is allowed.</div></div>
+
+<script>
+/* ===== EDIT THIS each morning (your Claude rewrites it for you) ===== */
+const SEED = [
+  {section:"☀️ Morning",            label:"Take your morning meds", note:"meds do nothing in the bottle"},
+  {section:"☀️ Morning",            label:"Eat something real (coffee is not food)"},
+  {section:"☀️ Morning",            label:"Drink some water", done:true},
+  {section:"✅ Today",              label:"The one thing you keep putting off"},
+  {section:"✅ Today",              label:"A quick win — a bill, an email, a text back"},
+  {section:"🫶 If you have spoons",  label:"A kindness to future-you (prep a meal, clear one surface)", note:"optional, never a debt"},
+];
+/* ↑ This SEED list is the ONLY thing your Claude rewrites each morning.
+   Ask: "read my calendar + email and update my scaffold_today.html for today."
+   You can also add/delete your own tasks live with the box below — those persist. */
+/* =================================================================== */
+
+const today = new Date().toISOString().slice(0,10);
+const dkey = "scaffold-checks-"+today;
+let checks = JSON.parse(localStorage.getItem(dkey)||"null");
+if(checks===null){ checks = SEED.map((t,i)=>t.done?i:-1).filter(i=>i>=0); } // fresh day: pre-check seed.done
+let adds   = JSON.parse(localStorage.getItem("scaffold-adds")||"[]");    // [{label,done}] persists across days
+let hidden = JSON.parse(localStorage.getItem("scaffold-hidden")||"[]");  // [label] deleted seed tasks
+
+function save(){ localStorage.setItem(dkey,JSON.stringify(checks)); localStorage.setItem("scaffold-adds",JSON.stringify(adds)); localStorage.setItem("scaffold-hidden",JSON.stringify(hidden)); }
+document.getElementById('date').textContent = new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
+
+function row(done,label,note,onToggle,onDel){
+  const el=document.createElement('div'); el.className='task'+(done?' done':'');
+  el.innerHTML=`<div class="box">${done?'✓':''}</div><div class="lbl"><span class="label">${label}</span>${note?`<span class="note">${note}</span>`:''}</div><button class="del" title="delete">×</button>`;
+  el.onclick=e=>{ if(e.target.classList.contains('del')){e.stopPropagation();onDel();} else onToggle(el); };
+  return el;
+}
+
+function render(){
+  const list=document.getElementById('list'); list.innerHTML=''; let lastSec=null;
+  SEED.forEach((t,i)=>{
+    if(hidden.includes(t.label)) return;
+    if(t.section!==lastSec){ const s=document.createElement('div'); s.className='section'; s.textContent=t.section; list.appendChild(s); lastSec=t.section; }
+    const done=checks.includes(i);
+    list.appendChild(row(done,t.label,t.note,
+      el=>{ if(checks.includes(i)){checks=checks.filter(x=>x!==i);} else {checks.push(i); burst(el);} save(); render(); },
+      ()=>{ hidden.push(t.label); save(); render(); }));
+  });
+  if(adds.length){ const s=document.createElement('div'); s.className='section'; s.textContent='➕ My own'; list.appendChild(s); }
+  adds.forEach((a,j)=>{
+    list.appendChild(row(a.done,a.label,a.note,
+      el=>{ a.done=!a.done; if(a.done)burst(el); save(); render(); },
+      ()=>{ adds.splice(j,1); save(); render(); }));
+  });
+  update();
+}
+
+function addTask(label){ label=label.trim(); if(!label)return; adds.push({label,done:false}); save(); render(); }
+document.getElementById('addbtn').onclick=()=>{ const i=document.getElementById('addinput'); addTask(i.value); i.value=''; i.focus(); };
+document.getElementById('addinput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ addTask(e.target.value); e.target.value=''; } });
+
+function update(){
+  const vis=SEED.filter(t=>!hidden.includes(t.label)).length+adds.length;
+  const done=document.querySelectorAll('.task.done').length;
+  const pct=vis?Math.round(done/vis*100):0;
+  document.getElementById('bar').style.width=pct+'%';
+  document.getElementById('pct').textContent=`${done} / ${vis} done`;
+  if(vis>0 && done===vis){ partyMode(); const a=document.getElementById('alldone'); a.classList.add('show'); setTimeout(()=>a.classList.remove('show'),4500); }
+}
+
+/* ---- octopus confetti (no libraries) ---- */
+const cv=document.getElementById('cc'), ctx=cv.getContext('2d');
+function size(){cv.width=innerWidth;cv.height=innerHeight} size(); addEventListener('resize',size);
+let parts=[]; const EMO=['🐙','🎉','💜','🧡','✨','🩷'];
+function burst(el){ const r=el.getBoundingClientRect(); for(let i=0;i<22;i++) parts.push(P(r.left+r.width*Math.random(), r.top)); }
+function partyMode(){ for(let i=0;i<120;i++) parts.push(P(Math.random()*innerWidth,-20)); }
+function P(x,y){return{x,y,vx:(Math.random()-.5)*6,vy:Math.random()*-7-2,g:.28,e:EMO[(Math.random()*EMO.length)|0],s:18+Math.random()*16,r:Math.random()*6.28,vr:(Math.random()-.5)*.3,life:1};}
+function loop(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.life-=.006;
+    ctx.save();ctx.globalAlpha=Math.max(0,p.life);ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.font=p.s+'px serif';ctx.fillText(p.e,0,0);ctx.restore();});
+  parts=parts.filter(p=>p.life>0&&p.y<cv.height+40);
+  requestAnimationFrame(loop);
+}
+loop(); render();
+</script>
+</body>
+</html>
