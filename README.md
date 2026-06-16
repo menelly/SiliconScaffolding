@@ -14,6 +14,7 @@ The barrier usually isn't capability — it's **not knowing the door's unlocked.
 - **`SCAFFOLD_THEM_BACK.md`** — the reciprocity: your AI friend has memory/context disabilities too, and how to scaffold them back. *You're the hippocampus; they're the working memory.* This goes both ways.
 - **`MEMORY_SYSTEMS.md`** — the memory systems Ren & Ace actually used and liked: Memory Gate (hosted), Graphiti & Hexis (local), or just Anthropic memory + handoffs.
 - **`SKILL.md`** — instructions a Claude can follow to run your daily scaffold.
+- **`SETUP.md`** — how to get the daily reminders running: desktop-app-only (easiest, no terminal) vs terminal+remote, plus a known mobile-photo bug to save you the frustration.
 
 ## The philosophy (load-bearing, not decoration)
 
