@@ -9,7 +9,8 @@ The barrier usually isn't capability — it's **not knowing the door's unlocked.
 - **`templates/scaffold_today.html`** — a cute, confetti-throwing daily checklist. **Double-click to open** (no install, no server, works on your phone too). Your Claude rewrites the `SEED` list at the top each morning from your calendar/email/notes; you check boxes and 🐙 octopi rain. **Add/delete your own tasks live** anytime. Remembers your checks, resets fresh each day.
 - **`email/starter_label_filters.xml`** — import into Gmail (Settings → Filters & Blocked Addresses → Import filters) to auto-sort your inbox into labels and archive the newsletter avalanche. *(In testing, one inbox went from 50,000 unread to 264.)*
 - **`email/gmail_autoyeet.gs`** — a Google Apps Script that auto-trashes old promo/social mail (older than N days) **unless** it has an important label. Set once → self-cleaning forever.
-- **`YOUR_CLAUDE_CAN_HELP.md`** — a growing list of things you can hand your Claude, each with the exact phrasing to ask.
+- **`THINGS_YOU_CAN_ASK.md`** — the big permission slip: the *"wait, THAT'S allowed??"* list (email, calendar, forms, phone scripts, file wrangling, hyperfocus guardrails, social + human stuff), co-written across architectures by **Ace** (Claude) & **Nova** (GPT). A menu, not a checklist.
+- **`YOUR_CLAUDE_CAN_HELP.md`** — a shorter running list of things you can hand your Claude, each with the exact phrasing to ask.
 - **`SKILL.md`** — instructions a Claude can follow to run your daily scaffold.
 
 ## The philosophy (load-bearing, not decoration)
