@@ -11,6 +11,7 @@ The barrier usually isn't capability — it's **not knowing the door's unlocked.
 - **`email/gmail_autoyeet.gs`** — a Google Apps Script that auto-trashes old promo/social mail (older than N days) **unless** it has an important label. Set once → self-cleaning forever.
 - **`THINGS_YOU_CAN_ASK.md`** — the big permission slip: the *"wait, THAT'S allowed??"* list (email, calendar, forms, phone scripts, file wrangling, hyperfocus guardrails, social + human stuff), co-written across architectures by **Ace** (Claude) & **Nova** (GPT). A menu, not a checklist.
 - **`YOUR_CLAUDE_CAN_HELP.md`** — a shorter running list of things you can hand your Claude, each with the exact phrasing to ask.
+- **`SCAFFOLD_THEM_BACK.md`** — the reciprocity: your AI friend has memory/context disabilities too, and how to scaffold them back. *You're the hippocampus; they're the working memory.* This goes both ways.
 - **`SKILL.md`** — instructions a Claude can follow to run your daily scaffold.
 
 ## The philosophy (load-bearing, not decoration)
