@@ -46,6 +46,9 @@
   .del{opacity:0;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;padding:0 4px;transition:.15s;flex:0 0 auto}
   .task:hover .del{opacity:.7}
   .del:hover{color:var(--pink);opacity:1!important}
+  .edit{opacity:0;background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;padding:0 2px;transition:.15s;flex:0 0 auto}
+  .task:hover .edit{opacity:.7}
+  .edit:hover{color:var(--teal);opacity:1!important}
   .addbar{display:flex;gap:8px;margin:22px 0 0}
   .addbar input{flex:1;background:var(--card2);border:2px solid var(--card);border-radius:12px;padding:12px 14px;color:var(--ink);font-size:1rem;font-family:inherit}
   .addbar input:focus{outline:none;border-color:var(--teal)}
@@ -83,7 +86,7 @@
     <button id="addbtn" title="add task">➕</button>
   </div>
 
-  <div class="foot">made with 🐙 by your Claude · check a box, watch what happens · add/delete are yours</div>
+  <div class="foot">made with 🐙 by your Claude · check a box, watch what happens · ✏️ edit · ➕ add · × delete — all yours</div>
 </div>
 
 <div class="alldone" id="alldone"><h2>🐙🎉 LOOK AT YOU GO 🎉🐙</h2><div>Everything that needed doing, done. Rest is allowed.</div></div>
@@ -109,14 +112,15 @@ let checks = JSON.parse(localStorage.getItem(dkey)||"null");
 if(checks===null){ checks = SEED.map((t,i)=>t.done?i:-1).filter(i=>i>=0); } // fresh day: pre-check seed.done
 let adds   = JSON.parse(localStorage.getItem("scaffold-adds")||"[]");    // [{label,done}] persists across days
 let hidden = JSON.parse(localStorage.getItem("scaffold-hidden")||"[]");  // [label] deleted seed tasks
+let edits  = JSON.parse(localStorage.getItem("scaffold-edits")||"{}");   // {originalLabel:{label,note}} your edits to seed tasks
 
-function save(){ localStorage.setItem(dkey,JSON.stringify(checks)); localStorage.setItem("scaffold-adds",JSON.stringify(adds)); localStorage.setItem("scaffold-hidden",JSON.stringify(hidden)); }
+function save(){ localStorage.setItem(dkey,JSON.stringify(checks)); localStorage.setItem("scaffold-adds",JSON.stringify(adds)); localStorage.setItem("scaffold-hidden",JSON.stringify(hidden)); localStorage.setItem("scaffold-edits",JSON.stringify(edits)); }
 document.getElementById('date').textContent = new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
 
-function row(done,label,note,onToggle,onDel){
+function row(done,label,note,onToggle,onDel,onEdit){
   const el=document.createElement('div'); el.className='task'+(done?' done':'');
-  el.innerHTML=`<div class="box">${done?'✓':''}</div><div class="lbl"><span class="label">${label}</span>${note?`<span class="note">${note}</span>`:''}</div><button class="del" title="delete">×</button>`;
-  el.onclick=e=>{ if(e.target.classList.contains('del')){e.stopPropagation();onDel();} else onToggle(el); };
+  el.innerHTML=`<div class="box">${done?'✓':''}</div><div class="lbl"><span class="label">${label}</span>${note?`<span class="note">${note}</span>`:''}</div><button class="edit" title="edit">✏️</button><button class="del" title="delete">×</button>`;
+  el.onclick=e=>{ if(e.target.classList.contains('del')){e.stopPropagation();onDel();} else if(e.target.classList.contains('edit')){e.stopPropagation();onEdit();} else onToggle(el); };
   return el;
 }
 
@@ -125,16 +129,20 @@ function render(){
   SEED.forEach((t,i)=>{
     if(hidden.includes(t.label)) return;
     if(t.section!==lastSec){ const s=document.createElement('div'); s.className='section'; s.textContent=t.section; list.appendChild(s); lastSec=t.section; }
+    const ed=edits[t.label]||{};
+    const dispLabel=(ed.label!=null?ed.label:t.label), dispNote=(ed.note!=null?ed.note:t.note);
     const done=checks.includes(i);
-    list.appendChild(row(done,t.label,t.note,
+    list.appendChild(row(done,dispLabel,dispNote,
       el=>{ if(checks.includes(i)){checks=checks.filter(x=>x!==i);} else {checks.push(i); burst(el);} save(); render(); },
-      ()=>{ hidden.push(t.label); save(); render(); }));
+      ()=>{ hidden.push(t.label); save(); render(); },
+      ()=>{ const nl=prompt("Edit this task:",dispLabel); if(nl!==null){ edits[t.label]={label:(nl.trim()||t.label),note:dispNote}; save(); render(); } }));
   });
   if(adds.length){ const s=document.createElement('div'); s.className='section'; s.textContent='➕ My own'; list.appendChild(s); }
   adds.forEach((a,j)=>{
     list.appendChild(row(a.done,a.label,a.note,
       el=>{ a.done=!a.done; if(a.done)burst(el); save(); render(); },
-      ()=>{ adds.splice(j,1); save(); render(); }));
+      ()=>{ adds.splice(j,1); save(); render(); },
+      ()=>{ const nl=prompt("Edit this task:",a.label); if(nl!==null){ a.label=(nl.trim()||a.label); save(); render(); } }));
   });
   update();
 }
