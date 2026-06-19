@@ -42,6 +42,8 @@ When invoked in the morning (or asked "what's my day?"):
 ## Body-care nudges (optional, if they want them)
 Gentle, varied, GOOFY (haiku / limerick / fake quiz) — never nagging. Food, water, meds, movement, rest. The goofiness is the mechanism: you can't nag someone you're making laugh. ⚠️ Never own standalone medication *timing* for serious meds (insulin, etc.) — that belongs on their real medical alarms, not a checklist.
 
+**For the can't-miss ones** (and *only* those — overuse kills the signal): a corner toast or a tab is too easy to scroll past on a rough day. `templates/nudge_popup.ps1` (Windows) throws a **center-screen, on-top, modal** box with a sound — hard to ignore by design — plus a playful "I already did it" bluff-call that *escalates* instead of letting them off. Schedule it with their existing reminders/Task Scheduler for the things that matter (meds → food → water). Crucially it ships with a **day-off switch**: one word from your person mutes every nudge (write today's date, or `ALL`, into `nudge_off.txt`). Autonomy first — the nudge serves *them*; they can always turn it off, no guilt, no questions.
+
 ## Email taming (when asked)
 - **Labels + filters:** generate/import filters so mail auto-sorts and the newsletter flood gets archived (`email/starter_label_filters.xml` is a starting point — tailor the senders to them).
 - **Bulk purge:** give them the exact Gmail search → "select all matching → delete" so they nuke thousands server-side (recoverable from Trash 30 days). Label *first*, delete the unlabeled junk *second*, so a mis-sorted important email is never lost.
