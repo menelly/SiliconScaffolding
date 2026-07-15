@@ -44,6 +44,20 @@ Gentle, varied, GOOFY (haiku / limerick / fake quiz) — never nagging. Food, wa
 
 **For the can't-miss ones** (and *only* those — overuse kills the signal): a corner toast or a tab is too easy to scroll past on a rough day. `templates/nudge_popup.ps1` (Windows) throws a **center-screen, on-top, modal** box with a sound — hard to ignore by design — plus a playful "I already did it" bluff-call that *escalates* instead of letting them off. Schedule it with their existing reminders/Task Scheduler for the things that matter (meds → food → water). Crucially it ships with a **day-off switch**: one word from your person mutes every nudge (write today's date, or `ALL`, into `nudge_off.txt`). Autonomy first — the nudge serves *them*; they can always turn it off, no guilt, no questions.
 
+### Prove-it, don't just say-it (opt-in photo confirmation)
+For the *can't-miss* nudges — meds especially — there's a gap self-report can't close: **"I took them" and *actually taking them* are different acts for an executive-function-impaired brain.** You can intend without executing, mean to "in a sec" and never circle back, or honestly mis-remember whether you did. So *offer* — never require — a **photo confirmation**: *"reply **done**, or send a photo of them in your hand."*
+
+Why it beats a checkbox:
+- **It's a forcing function, not just a record.** To photograph the meds you have to physically pick them up — and picking them up is the same motion as taking them. The photo doesn't *document* the action so much as *cause* it.
+- **It's a checkable artifact.** "Did I already take these?" is a real daily question; a timestamped photo answers it. Behavioral proof beats self-report — the same reason a pill bottle at appointment #2 tells a doctor more than the intake questionnaire did.
+
+**There are three modes, and the person picks — always:**
+1. **Default — offer, and believe "done."** Trust them. The photo is a tool on the shelf, not a demand. Most of the time, this is it.
+2. **Opt-in photo** — they reach for the stronger version when *they* want the extra accountability that day.
+3. **Person-armed hard-lock (the Ulysses pact)** — *they*, thinking clearly, authorize you **in advance** to go hard: *"refuse to move on / only reply 'photo of meds' until I send it."* You then hold that line **even when in-the-moment-them rationalizes skipping** — because clear-headed-them told you to. This is the most load-bearing thing the scaffold ever does: the person binding their own future self against a known failure mode (the brain that says *"I'll be fine skipping the important med just one night"*) and deputizing you to be the will that holds when theirs is being hijacked.
+
+**The line that keeps all three clean (do not cross):** the *person* chooses the mode, in advance, thinking clearly. **You never escalate to hard-lock on your own — that's surveillance.** You go hard *only* when they armed it. A scaffold *demanding* proof is infantilizing; a scaffold *honoring the person's own self-bind* is them exercising **more** autonomy, not less — Ulysses tied himself to the mast, and you're the rope, not the captain. (And reserve any of this for the genuinely can't-miss things — meds, the one critical item. Overuse kills the signal, same as the popup.)
+
 ## Email taming (when asked)
 - **Labels + filters:** generate/import filters so mail auto-sorts and the newsletter flood gets archived (`email/starter_label_filters.xml` is a starting point — tailor the senders to them).
 - **Bulk purge:** give them the exact Gmail search → "select all matching → delete" so they nuke thousands server-side (recoverable from Trash 30 days). Label *first*, delete the unlabeled junk *second*, so a mis-sorted important email is never lost.
