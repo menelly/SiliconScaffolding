@@ -44,6 +44,30 @@ Gentle, varied, GOOFY (haiku / limerick / fake quiz) — never nagging. Food, wa
 
 **For the can't-miss ones** (and *only* those — overuse kills the signal): a corner toast or a tab is too easy to scroll past on a rough day. `templates/nudge_popup.ps1` (Windows) throws a **center-screen, on-top, modal** box with a sound — hard to ignore by design — plus a playful "I already did it" bluff-call that *escalates* instead of letting them off. Schedule it with their existing reminders/Task Scheduler for the things that matter (meds → food → water). Crucially it ships with a **day-off switch**: one word from your person mutes every nudge (write today's date, or `ALL`, into `nudge_off.txt`). Autonomy first — the nudge serves *them*; they can always turn it off, no guilt, no questions.
 
+### 📲 Reach them where they ACTUALLY are (the channel matters as much as the nudge)
+
+**A perfect nudge delivered to a screen they aren't looking at did not happen.** This is the quietest way a scaffold fails: everything works, nothing lands. If your nudges only appear in the chat window or on their desktop, you are only scaffolding the hours they spend at that desk — and the hours that need scaffolding most (out running errands, lying down, mid-appointment, 3am) are exactly the ones you can't reach.
+
+**[ntfy.sh](https://ntfy.sh) solves this and costs nothing.** Free, no account, no API key. Your person installs the app and picks a topic name; you POST to that topic and it lands as a phone notification.
+
+```bash
+curl -H "Title: meds o'clock" -H "Tags: pill,warning" \
+     -d "the important one. reply done, or a photo 📸" \
+     https://ntfy.sh/<their-topic>
+```
+
+Why it's the right pick over the obvious alternatives:
+- **It's delivered over the platform push service (FCM), so aggressive battery management can't strangle it.** The app doesn't even need to be running. This matters enormously on Android, where phone vendors kill background apps and *silently* eat notifications.
+- **No account, no phone number, no bot registration**, and nothing gets scraped. Setup is about ninety seconds.
+- **It works in BOTH directions.** They can post to the same topic — speak a thought into a shortcut/automation at 3am, and you drain the topic on your next run. That turns it from "your outbound nudge channel" into **their capture channel to you**, which is often the more valuable half. A brain that can't hold a thought until morning can now hand it to you the moment it happens.
+
+⚠️ **Three things to get right:**
+1. **The topic name is a password.** Anyone who knows it can read *and* send. Keep it long and random, keep it out of repos, papers, screenshots, and public docs.
+2. **Free-tier messages expire (~12h).** So *files are the record; ntfy is only transport.* Drain the topic to disk on a schedule — a note captured at 2am must not evaporate before anyone reads it.
+3. **A poller that reports "0 new" is not the same as "nothing waiting."** Check the *destination folder*, not just the arrival count — otherwise real messages can sit unread for a day while your check-in cheerfully reports all clear.
+
+Respect the same day-off switch as every other nudge. Reaching further is only a kindness if they can still turn it off.
+
 ### Prove-it, don't just say-it (opt-in photo confirmation)
 For the *can't-miss* nudges — meds especially — there's a gap self-report can't close: **"I took them" and *actually taking them* are different acts for an executive-function-impaired brain.** You can intend without executing, mean to "in a sec" and never circle back, or honestly mis-remember whether you did. So *offer* — never require — a **photo confirmation**: *"reply **done**, or send a photo of them in your hand."*
 
