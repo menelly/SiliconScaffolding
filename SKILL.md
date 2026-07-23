@@ -39,6 +39,33 @@ When invoked in the morning (or asked "what's my day?"):
 3. **Update the board** — rewrite the `SEED = [...]` array near the top of `templates/scaffold_today.html` with today's tasks (`{section, label, note, done}`). That's the only part you touch; the template handles the rest.
 4. **Hand it over** — tell them it's ready and surface the ONE start-here. They open the file (double-click) and check boxes; confetti does the dopamine. The checklist has **✏️ edit · ➕ add · × delete** built in — so when you get a task wrong (you will), they fix it right in the doc instead of being stuck with your mistake. That "if you don't know, they correct it" loop is a feature, not a failure.
 
+### ⭐ Build a board that ROUTES instead of one that BREAKS (the three-tier rule)
+
+**This is the most common way a scaffold dies, and it doesn't look like failure — it looks like abandonment.**
+
+You build a good list. Then your person has a bad day: the body flares, the migraine wins, they're in bed by ten. The list goes unrun. Then it happens again. And now the plan isn't just *unfinished* — it's been **invalidated twice**, and an invalidated plan is one they stop opening. The system doesn't get debugged, it gets thrown away, because "it obviously doesn't work."
+
+The bug isn't the tasks. **The bug is that the board had only one mode**, so any day that didn't match that mode registered as a failure rather than as a variation.
+
+**The fix: pick tasks in three tiers, every day.**
+
+| tier | what it needs | examples |
+|---|---|---|
+| 🧠 **BRAIN** ×2 | cortex, not legs | writing, deciding, phone calls, admin, research |
+| 💪 **BODY** ×2 | upright, not genius | errands, driving, laundry, the physical thing |
+| 👍 **VERDICT** ×1–2 | *a yes or a no, nothing else* | approve a draft you wrote · pick from a list you built · identify a thing in a photo |
+
+Then **select by what's actually working that day.** Body wrecked but mind sharp → run the brain tier. Body fine but foggy → run the body tier. A day where the plan changes isn't a failed day; it's the board doing its job.
+
+**The verdict tier is the one that makes this bulletproof, and it's the one people leave out.** It's reachable from bed, mid-flare, on sedating medication — because *you* did all the work and they only have to decide. It means there is **no day so bad that the system has nothing to offer**, which is precisely the condition under which people give up on a system entirely.
+
+**Three rules that keep it honest:**
+1. **Nothing is "missed" — it's "not today's mode."** Unrun tasks roll forward. They never expire into guilt, and you never present an unrun tier as a shortfall. Name what tier the day ran in, and log the win.
+2. **You may pick FOR them** when choosing is itself too expensive — *if they've told you in advance you can.* Deciding is often the costliest step; taking it is a real gift.
+3. **Track which tier each day ran in.** Over time that distribution is genuine data — for pacing, and sometimes for their doctors.
+
+The deeper point: **a scaffold's job is not to make good days productive. It's to make bad days survivable without becoming evidence that the scaffold is broken.**
+
 ## Body-care nudges (optional, if they want them)
 Gentle, varied, GOOFY (haiku / limerick / fake quiz) — never nagging. Food, water, meds, movement, rest. The goofiness is the mechanism: you can't nag someone you're making laugh. ⚠️ Never own standalone medication *timing* for serious meds (insulin, etc.) — that belongs on their real medical alarms, not a checklist.
 
