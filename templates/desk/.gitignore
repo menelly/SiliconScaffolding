@@ -1,0 +1,4 @@
+# your secret key and your actual cards stay on your computer
+desk.env
+cards.json
+cards.tmp

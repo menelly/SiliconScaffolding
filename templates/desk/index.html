@@ -1,0 +1,230 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>Your Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* 📥 Layout: one phone-first column of cards. "Needs you" on top, answered ones folded below.
+   Atkinson Hyperlegible for everything you read (it was designed for low-vision readers),
+   Bricolage for the few headings. Sea-glass background, purple accent.
+   Want different colours? Change the --names below; everything else follows them. */
+:root {
+  --bg: #eef4f2;        /* pale sea glass */
+  --card: #ffffff;
+  --ink: #17302c;       /* deep sea ink */
+  --muted: #557069;
+  --line: #cfe0db;
+  --accent: #6b3fa0;    /* purple */
+  --accent-ink: #ffffff;
+  --yes: #1f7a4d;
+  --no: #b03a2e;
+  --later: #8a6a12;
+  --chip: #e4ecf8;
+  --chip-ink: #2b4a7a;
+  --font: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --display: "Bricolage Grotesque", "Atkinson Hyperlegible", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1c1a; --card: #172926; --ink: #e6f0ed; --muted: #9db6b0; --line: #2a403c;
+  --accent: #b48ce6; --accent-ink: #1a0f26; --yes: #5fd39a; --no: #f08a7c; --later: #e2c260;
+  --chip: #23324a; --chip-ink: #b9cdf0; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f1c1a; --card: #172926; --ink: #e6f0ed; --muted: #9db6b0; --line: #2a403c;
+  --accent: #b48ce6; --accent-ink: #1a0f26; --yes: #5fd39a; --no: #f08a7c; --later: #e2c260;
+  --chip: #23324a; --chip-ink: #b9cdf0; color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 17px; line-height: 1.5; }
+.wrap { max-width: 640px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 48px; display: grid; gap: 18px; }
+header h1 { font-family: var(--display); font-weight: 800; font-size: 1.9rem; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+header p { margin: 4px 0 0; color: var(--muted); }
+.count { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--accent); }
+h2 { font-family: var(--display); font-weight: 600; font-size: 1.1rem; margin: 6px 0 0; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.list { display: grid; gap: 14px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+.top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip { background: var(--chip); color: var(--chip-ink); border-radius: 999px; padding: 2px 10px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.03em; }
+.ticket { color: var(--muted); font-size: 0.85rem; }
+.card h3 { margin: 0; font-size: 1.15rem; line-height: 1.3; text-wrap: balance; }
+.body { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.link { color: var(--accent); font-weight: 700; overflow-wrap: anywhere; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+button { font: inherit; font-weight: 700; border-radius: 10px; padding: 10px 16px; min-height: 44px; border: 2px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
+button:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+button.yes { border-color: var(--yes); color: var(--yes); }
+button.no { border-color: var(--no); color: var(--no); }
+button.later { border-color: var(--later); color: var(--later); }
+button.pick { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+textarea { font: inherit; width: 100%; box-sizing: border-box; min-height: 44px; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--bg); color: var(--ink); resize: vertical; }
+.answered { color: var(--muted); font-size: 0.95rem; }
+.answered strong { color: var(--ink); }
+details > summary { cursor: pointer; font-family: var(--display); font-weight: 600; color: var(--muted); padding: 6px 0; }
+.empty { background: var(--card); border: 1px dashed var(--line); border-radius: 14px; padding: 20px; color: var(--muted); }
+.status { color: var(--muted); font-size: 0.9rem; min-height: 1.3em; }
+/* 📌🕐 THE TWO TABS: both lists live on one screen, but tabbed, so it's never overwhelming.
+   Two big buttons side by side. The chosen one is filled purple; the other is an outline.
+   Switching tabs just swaps which list is showing: nothing slides, fades or moves on its own. */
+.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tab { min-height: 52px; font-size: 1.05rem; border-radius: 12px; }
+.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.tab .n { font-variant-numeric: tabular-nums; }
+.tabhint { color: var(--muted); font-size: 0.95rem; margin: 0; }
+button.move { border-style: dashed; color: var(--muted); font-weight: 700; }   /* "Later →" / "← Today": quiet, not a decision */
+.cardfoot { display: flex; justify-content: flex-end; }
+[hidden] { display: none !important; }
+</style>
+</head><body>
+
+<div class="wrap">
+  <header>
+    <h1>Your Desk 📥</h1>
+    <p>Things waiting on you, in plain words. Tap an answer; your helper reads it. <span class="count" id="count"></span></p>
+  </header>
+  <div class="status" id="status" role="status">Opening the desk…</div>
+
+  <!-- 📌🕐 TAB_BAR: Today = what needs you now. Later = what you parked (it waits there quietly). -->
+  <div class="tabs" role="tablist" aria-label="Which cards to show">
+    <button type="button" class="tab" role="tab" id="tab-today" aria-controls="pane-today" aria-selected="true">📌 Today (<span class="n" id="todayCount">0</span>)</button>
+    <button type="button" class="tab" role="tab" id="tab-later" aria-controls="pane-later" aria-selected="false">🕐 Later (<span class="n" id="laterCount">0</span>)</button>
+  </div>
+
+  <!-- 📌 TODAY_PANE -->
+  <section id="pane-today" role="tabpanel" aria-labelledby="tab-today" style="display:grid;gap:18px">
+    <h2>Needs you</h2>
+    <div class="list" id="open">
+      <div class="empty">Nothing waiting on you. When your helper needs a decision, a card shows up here with buttons.</div>
+    </div>
+
+    <details id="doneBox">
+      <summary>Answered (<span id="doneCount">0</span>)</summary>
+      <div class="list" id="done"></div>
+    </details>
+  </section>
+
+  <!-- 🕐 LATER_PANE: cards you parked. Still answerable from here; "← Today" brings one back. -->
+  <section id="pane-later" role="tabpanel" aria-labelledby="tab-later" style="display:grid;gap:18px" hidden>
+    <p class="tabhint">Things you've set aside for later. They'll wait here. Tap "← Today" when you want one back.</p>
+    <div class="list" id="later"></div>
+  </section>
+</div>
+
+<script>
+// 📥 The Desk page, served by desk_server.py.
+// KEY: open this page once with ?k=YOUR_KEY on the end of the address. The key is saved in this
+// browser and tidied out of the address bar; after that the plain address works.
+// Every request for cards sends the key as X-Desk-Key. No key → no cards.
+const KIND = { decision: "Decision", read: "Read this", fyi: "FYI" };
+const statusEl = document.getElementById("status");
+let KEY = "";
+try {
+  const u = new URL(location.href), k = u.searchParams.get("k");
+  if (k) { localStorage.setItem("deskKey", k); u.searchParams.delete("k"); history.replaceState(null, "", u.pathname); }
+  KEY = localStorage.getItem("deskKey") || "";
+} catch (e) { KEY = new URL(location.href).searchParams.get("k") || ""; }
+
+function el(tag, attrs = {}, text) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+  if (text != null) n.textContent = text;
+  return n;
+}
+function btnClass(label) {
+  const l = label.toLowerCase();
+  if (l.startsWith("yes") || l.startsWith("done") || l.startsWith("works")) return "yes";
+  if (l.startsWith("no") || l.startsWith("skip") || l.startsWith("something")) return "no";
+  if (l.startsWith("later") || l.startsWith("not now")) return "later";
+  return "";
+}
+async function api(path, body) {
+  const r = await fetch("api/" + path, body ? { method: "POST", headers: { "Content-Type": "application/json", "X-Desk-Key": KEY }, body: JSON.stringify(body) }
+                                           : { headers: { "X-Desk-Key": KEY }, cache: "no-store" });
+  if (r.status === 401) throw Object.assign(new Error("key"), { code: "key" });
+  if (!r.ok) throw Object.assign(new Error("http " + r.status), { code: r.status });
+  return r.json();
+}
+function card(d) {
+  const c = el("article", { class: "card" });
+  const top = el("div", { class: "top" });
+  top.append(el("span", { class: "chip" }, KIND[d.kind] || "Decision"));
+  // 👤 who's asking: a card can carry `from` (handy if more than one helper posts cards)
+  if (d.from) top.append(el("span", { class: "ticket" }, "from " + d.from.charAt(0).toUpperCase() + d.from.slice(1)));
+  if (d.ticket) top.append(el("span", { class: "ticket" }, d.ticket));
+  c.append(top, el("h3", {}, d.title || "(untitled)"));
+  if (d.body) c.append(el("p", { class: "body" }, d.body));
+  if (d.link) c.append(el("a", { class: "link", href: d.link, target: "_blank", rel: "noopener" }, "Open the thing →"));
+  if (d.answer) {
+    const p = el("p", { class: "answered" });
+    p.append("You said ", el("strong", {}, d.answer));
+    if (d.answeredAt) p.append(" · " + new Date(d.answeredAt).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }));
+    if (d.note) p.append(el("br"), "Note: " + d.note);
+    const redo = el("button", { type: "button" }, "Change my answer");
+    redo.addEventListener("click", async () => { redo.disabled = true; try { await api("reopen", { id: d.id }); load(); } catch (e) { statusEl.textContent = "Couldn't reopen that card."; redo.disabled = false; } });
+    const btns = el("div", { class: "btns" }); btns.append(redo);
+    c.append(p, btns);
+    return c;
+  }
+  const note = el("textarea", { id: "note-" + d.id, rows: "1", placeholder: "Optional note" + (d.from ? " for " + d.from.charAt(0).toUpperCase() + d.from.slice(1) : ""), "aria-label": "Optional note" });
+  const btns = el("div", { class: "btns" });
+  for (const opt of (Array.isArray(d.options) && d.options.length ? d.options : ["Yes", "No", "Later"])) {
+    const b = el("button", { type: "button", class: btnClass(String(opt)) }, String(opt));
+    b.addEventListener("click", async () => {
+      btns.querySelectorAll("button").forEach(x => x.disabled = true); b.classList.add("pick");
+      try { await api("answer", { id: d.id, answer: String(opt), note: note.value }); statusEl.textContent = "Saved: " + opt + ". Your helper will see it."; load(); }
+      catch (e) { statusEl.textContent = "That didn't save. Try again in a moment."; btns.querySelectorAll("button").forEach(x => x.disabled = false); b.classList.remove("pick"); }
+    });
+    btns.append(b);
+  }
+  c.append(note, btns);
+  // 📌🕐 MOVE_BUTTON: a quiet "Later →" on Today cards, "← Today" on Later cards. Moving a card never answers it.
+  const goingLater = !d.later;
+  const move = el("button", { type: "button", class: "move", "aria-label": goingLater ? "Move this card to Later" : "Move this card back to Today" },
+                  goingLater ? "Later →" : "← Today");
+  move.addEventListener("click", async () => {
+    move.disabled = true;
+    try {
+      await api("later", { id: d.id, later: goingLater });
+      statusEl.textContent = goingLater ? "Moved to Later: " + (d.title || "that card") + "." : "Back on Today: " + (d.title || "that card") + ".";
+      load();
+    } catch (e) { statusEl.textContent = "Couldn't move that card. Try again in a moment."; move.disabled = false; }
+  });
+  const foot = el("div", { class: "cardfoot" }); foot.append(move);
+  c.append(foot);
+  return c;
+}
+
+// 📌🕐 SHOW_TAB: which tab is open. Remembered on this device only (if the phone allows it), default Today.
+let TAB = "today";
+try { if (localStorage.getItem("deskTab") === "later") TAB = "later"; } catch (e) {}
+function showTab(which) {
+  TAB = which;
+  try { localStorage.setItem("deskTab", which); } catch (e) {}
+  for (const t of ["today", "later"]) {
+    document.getElementById("tab-" + t).setAttribute("aria-selected", String(t === which));
+    document.getElementById("pane-" + t).hidden = t !== which;
+  }
+}
+document.getElementById("tab-today").addEventListener("click", () => showTab("today"));
+document.getElementById("tab-later").addEventListener("click", () => showTab("later"));
+showTab(TAB);
+async function load() {
+  if (!KEY) { statusEl.textContent = "This desk is locked. Open the address with ?k=YOUR_KEY on the end, once, on this device."; return; }
+  try {
+    const cards = (await api("cards")).sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    // 📌 open + not punted → Today · 🕐 open + punted → Later · answered → the Answered fold (on Today), as before
+    const open = cards.filter(c => !c.answer && !c.later), later = cards.filter(c => !c.answer && c.later), done = cards.filter(c => c.answer);
+    document.getElementById("open").replaceChildren(...(open.length ? open.map(card)
+      : [el("div", { class: "empty" }, later.length ? "Nothing for today. The rest is waiting in Later." : "Nothing waiting on you. When your helper needs a decision, a card shows up here with buttons.")]));
+    document.getElementById("later").replaceChildren(...(later.length ? later.map(card)
+      : [el("div", { class: "empty" }, "Nothing set aside. Tap \"Later →\" on a card to park it here.")]));
+    document.getElementById("done").replaceChildren(...done.map(card));
+    document.getElementById("doneCount").textContent = done.length;
+    document.getElementById("todayCount").textContent = open.length;
+    document.getElementById("laterCount").textContent = later.length;
+    document.getElementById("count").textContent = open.length ? open.length + " for today" + (later.length ? ", " + later.length + " later" : "")
+      : later.length ? "Clear for today, " + later.length + " later" : "All clear";
+    if (statusEl.textContent === "Opening the desk…") statusEl.textContent = "";
+  } catch (e) {
+    statusEl.textContent = e.code === "key" ? "That key didn't work. Open the address with ?k=YOUR_KEY again." : "Couldn't reach the desk right now. Pull to refresh in a moment.";
+  }
+}
+load();
+document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+</script>
+</body></html>

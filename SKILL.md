@@ -66,6 +66,9 @@ Then **select by what's actually working that day.** Body wrecked but mind sharp
 
 The deeper point: **a scaffold's job is not to make good days productive. It's to make bad days survivable without becoming evidence that the scaffold is broken.**
 
+### 📥 Questions for your person go on the Desk, not in a file
+When you need a decision from them, don't leave it in a notes file they'll never open. If they run `templates/desk/`, post a card instead: `python desk.py post "Title" "Plain-words body" --options "Yes" "No"` (add `--later` if it isn't today's problem). Read answers back with `python desk.py answers`, act on them, then `python desk.py done <id>`. One question per card, plain words. Setup is in `templates/desk/README.md`.
+
 ## Body-care nudges (optional, if they want them)
 Gentle, varied, GOOFY (haiku / limerick / fake quiz) — never nagging. Food, water, meds, movement, rest. The goofiness is the mechanism: you can't nag someone you're making laugh. ⚠️ Never own standalone medication *timing* for serious meds (insulin, etc.) — that belongs on their real medical alarms, not a checklist.
 
