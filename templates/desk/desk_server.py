@@ -193,10 +193,19 @@ class Handler(BaseHTTPRequestHandler):
                 answer = str(body.get("answer", ""))[:200]
                 if answer not in [str(o) for o in (card.get("options") or ["Yes", "No", "Later"])]:
                     return self._send(400, {"error": "not one of this card's answers"})
-                card["answer"] = answer
-                card["answeredAt"] = now_utc()
                 note = str(body.get("note") or "").strip()[:2000]
                 card["note"] = note or None
+                # 🕐 A "Later" ANSWER IS A PUNT. Two buttons both called Later, where only one moved the
+                # card, made answered cards vanish into the Answered fold. Now a later-ish answer moves
+                # the card to the Later tab, still open, note kept.
+                if answer.strip().lower().startswith(("later", "not now")):
+                    card["later"] = True
+                    card["laterAt"] = now_utc()
+                    card["answer"] = None
+                    card["answeredAt"] = None
+                else:
+                    card["answer"] = answer
+                    card["answeredAt"] = now_utc()
             elif path == "/api/reopen":
                 # ↩️ "Change my answer": the card goes back to waiting.
                 card["answer"] = None
